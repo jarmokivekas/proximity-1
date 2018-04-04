@@ -30,14 +30,14 @@ struct transfer_frame_header_packed {
 
 int main(int argc, char const *argv[]) {
 	transfer_frame_header header = {
-		0b11, 0b1, 0b0,0b11, 0b0000000100,
-		0b1,0b000,0b1,0b00000000000,0b11111111
+		0b01, 0b1, 0b1,0b00, 0b1111101111,
+		0b1,0b111,0b1,0b01100000110,0b11111111
 	};
 	std::cout << sizeof(header) << "\n";
 	std::cout << (int)header.space_craft_id << "\n";
 	transfer_frame_header_packed packed_header = {
-		0b11, 0b1, 0b0,0b11, 0b0000000100,
-		0b1,0b000,0b1,0b00000000000,0b11111111
+		0b01, 0b1, 0b1,0b00, 0b1111101111,
+		0b1,0b111,0b1,0b01100000110,0b11111111
 	};
 	std::cout << sizeof(packed_header) << "\n";
 	std::cout << (int)packed_header.space_craft_id << "\n";
