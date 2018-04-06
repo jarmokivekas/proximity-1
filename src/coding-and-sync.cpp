@@ -17,9 +17,9 @@ enum encoding {
 
 class CNS {
 private:
+	uint8_t PLTU_buffer[PLTU_MAX_LEN];
+	uint8_t transfer_frame_buffer[TRANSFER_FRAME_MAX_LEN];
 	uint8_t attached_synch_marker[3] ={0xFA, 0xF3,0x20};
-	uint8_t transfer_frame[256];			// max 2048 bits data link layer
-	uint8_t cyclic_redundancy_check_32[4]; // 32 bits
 	// bool is_pltu_egress_active;
 	// bool is_transmission_active; // true between acquisition and tail (inclusive)
 	void add_CRC32(uint8_t *transfer_frame);
@@ -46,8 +46,11 @@ public:
 };
 
 CNS::CNS(void){
+	transfer_frame_buffer = ;
 	return;
 }
+
+CNS::idle_sequence(uint16_t LDCP_encoder)
 
 
 uint8_t *CNS::encode(uint8_t *transfer_frame, uint16_t frame_length, enum encoding encoding){
@@ -56,11 +59,10 @@ uint8_t *CNS::encode(uint8_t *transfer_frame, uint16_t frame_length, enum encodi
 
 
 int main(){
-	printf("%i\n", PLTU_MAX_LEN);
-	uint8_t pltu_buffer[PLTU_MAX_LEN] = {0x00,0xff,0xca,0xfe};
-	uint16_t frame_length = 4;
+
 	CNS cns;
-	uint8_t *encoded_frame = cns.encode(frame, frame_length, CNS_ENCODING_BYPASS);
+
+	// uint8_t *encoded_frame = cns.encode(frame, frame_length, CNS_ENCODING_BYPASS);
 	return 0;
 	// CNS.acquisition_sequence();
 	// while(1){

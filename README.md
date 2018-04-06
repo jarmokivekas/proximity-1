@@ -15,6 +15,20 @@ Proximity-1 is a communications protocol that used my mars orbiter, landers, and
 
 The standard defines a complete stack, including directives on modulation types on the physical layer, a coding and synchronization layer, data link layer. As far a complete communications systems go, proximity-1 is more complicated than for example most amateur radio systems, giving it robustness, but also simple enough to be implemented on resource-constrained microcontroller platforms.
 
+# Radio layer
+
+Bits are encoded as NRZ (no return to zero natural binary) or "Bi-phase-L", aka. Manchester encoding.
+Manchester requires typically 2x the bandwidth given the same datarate.
+
+
+# Common implementation methodology for bit field datastructures
+
+The Proximity-1 protocol stack utilizes a lot data structures made up from bit fields at fixed offset. At least in the structures for_
+
+- SPDU
+- transfer fame header
+- PULT
+
 
 
 # REQUIREMENTS LIST
