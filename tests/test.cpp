@@ -43,7 +43,25 @@ TEST(datalinklayer, SPDU_directive_set_transmitter_parameters){
     CHECK_EQUAL(1, spdu.data_encoding());
     CHECK_EQUAL(1, spdu.frequency());
 }
+TEST(datalinklayer, SPDU_directive_set_transmitter_parameters_size){
+    SPDU_directive_set_transmitter_parameters spdu = SPDU_directive_set_transmitter_parameters(1,1,1,1,1,1);
+    CHECK_EQUAL(2, sizeof(spdu));
+}
 
+
+TEST(datalinklayer, transfer_frame_header_interface_init){
+    v3_transfer_frame_header header = v3_transfer_frame_header(1,1,1,1,1,1,1,1,1,1);
+    CHECK_EQUAL(1, header.transfer_frame_version_number());
+    CHECK_EQUAL(1, header.quality_of_service_indicator());
+    CHECK_EQUAL(1, header.pdu_type_id());
+    CHECK_EQUAL(1, header.data_field_construction_identifier());
+    CHECK_EQUAL(1, header.spacecraft_identifier());
+    CHECK_EQUAL(1, header.pysical_channel_identifier());
+    CHECK_EQUAL(1, header.port_identifier());
+    CHECK_EQUAL(1, header.source_destination_identifier());
+    CHECK_EQUAL(1, header.frame_length());
+    CHECK_EQUAL(1, header.frame_sequence_number());
+}
 
 int main(int ac, char** av)
 {

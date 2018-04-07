@@ -1,18 +1,88 @@
 #include <iostream>
 #include <stdint.h>
+#include <string.h>
+
+const uint16_t MBI_MAXIMUM_FRAME_LENGTH = (5 + 2043);
+const uint8_t CRC32_LEN = 4;
+const uint8_t ASM_LEN = 3;
+const uint8_t CNS_OVERHEAD_LEN = (CRC32_LEN + ASM_LEN);
+const uint16_t PLTU_MAX_LEN = CNS_OVERHEAD_LEN + MBI_MAXIMUM_FRAME_LENGTH;
+const uint8_t FRAME_START_OFFSET = 3 ; // verison 3 frame strart in PLTU;
+
+const uint8_t TRANFER_FRAME_HEADER_LENGTH = 5;
 
 
 
-uint8_t version_num ;
-uint8_t qos_indicator;
-uint8_t pdu_type;
-uint8_t dfcid;
-uint16_t space_craft_id;
-uint8_t pysical_channel_id;
-uint8_t port_id;
-uint8_t src_dest_id;
-uint16_t frame_length;
-uint8_t frame_seq_number;
+
+
+class v3_transfer_frame_header {
+private:
+    uint8_t _buffer[TRANFER_FRAME_HEADER_LENGTH];
+
+public:
+
+    v3_transfer_frame_header (
+        uint8_t transfer_frame_version_number,
+        uint8_t quality_of_service_indicator,
+        uint8_t pdu_type_id,
+        uint8_t data_field_construction_identifier,
+        uint16_t spacecraft_identifier,
+        uint8_t pysical_channel_identifier,
+        uint8_t port_identifier,
+        uint8_t source_destination_identifier,
+        uint16_t frame_length,
+        uint8_t frame_sequence_number
+    ){
+        memset(_buffer, 0x00, sizeof(uint8_t) * TRANFER_FRAME_HEADER_LENGTH);
+        _buffer[0] |= (transfer_frame_version_number << 6);
+        _buffer[0] |= quality_of_service_indicator << 5;
+        _buffer[0] |= pdu_type_id << 4;
+        _buffer[0] |= data_field_construction_identifier << 2;
+        _buffer[0] |= 0xff00 & spacecraft_identifier >> 8;
+        _buffer[1] |= 0x00ff & spacecraft_identifier;
+        _buffer[2] |= pysical_channel_identifier << 7;
+        _buffer[2] |= port_identifier << 4;
+        _buffer[2] |= source_destination_identifier << 3;
+        _buffer[2] |= frame_length >> 8;
+        _buffer[3] |= frame_length;
+        _buffer[4] |= frame_sequence_number;
+    };
+
+    uint8_t transfer_frame_version_number(void){
+        return  (0b11000000 & _buffer[0]) >> 6;
+    };
+    uint8_t quality_of_service_indicator(void){
+        return  (0b00100000 & _buffer[0]) >> 5;
+    };
+    uint8_t pdu_type_id(void){
+        return  (0b00010000 & _buffer[0]) >> 4;
+    };
+    uint8_t data_field_construction_identifier(void){
+        return  (0b00001100 & _buffer[0]) >> 2;
+    };
+    uint16_t spacecraft_identifier(void){
+        return ((0b00000011 & _buffer[0]) << 8) | _buffer[1];
+    };
+    uint8_t pysical_channel_identifier(void){
+        return  (0b10000000 & _buffer[2]) >> 7;
+    };
+    uint8_t port_identifier(void){
+        return  (0b01110000 & _buffer[2]) >> 4;
+    };
+    uint8_t source_destination_identifier(void){
+        return  (0b00001000 & _buffer[2]) >> 3;
+    };
+    uint16_t frame_length(void){
+        return ((0b00000111 & _buffer[2]) << 8) | _buffer[3];
+    };
+    uint8_t frame_sequence_number(void){
+        return  _buffer[4];
+    };
+
+    v3_transfer_frame_header(uint8_t transfer_frame_header_buffer[TRANFER_FRAME_HEADER_LENGTH]){
+        memcpy(_buffer, transfer_frame_header_buffer, sizeof(uint8_t)*TRANFER_FRAME_HEADER_LENGTH);
+    };
+};
 
 
 

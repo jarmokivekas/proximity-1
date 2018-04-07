@@ -6,6 +6,7 @@ CPPUTEST_HOME = /home/jarmo/Projects/proximity/cpputest
 test:
 	g++ tests/test.cpp \
 		-g \
+		-Wall \
 		-I$(CPPUTEST_HOME)/include \
 		-Ibuild/ \
 		-include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h \
