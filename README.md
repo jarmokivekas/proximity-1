@@ -17,24 +17,24 @@ The standard defines a complete stack, including directives on modulation types 
 
 # Radio layer
 
-Bits are encoded as NRZ (no return to zero natural binary) or "Bi-phase-L", aka. Manchester encoding.
-Manchester requires typically 2x the bandwidth given the same datarate.
+Bits are encoded as NRZ (no return to zero natural binary) or "Bi-phase-L," aka. Manchester encoding.
+Manchester requires typically 2x the bandwidth given the same data rate.
 
 
-# Common implementation methodology for bit field datastructures
+# Common implementation methodology for bit field data structures
 
-The Proximity-1 protocol stack utilizes a lot data structures made up from bit fields at fixed offset. At least in the structures for_
+The Proximity-1 protocol stack utilizes a lot of data structures made up of bit fields at a fixed offset. At least in:
 
 - SPDU
 - transfer fame header
 - PULT
 
 
-## Non mutability
+## Non-mutability
 
-The is little reason to mutate messages on any level of the communication stack. Objects representing various parts of a data packet can be declared with constant data members. This is to say, that the messages are only either read from when receiving a message, or built from the ground up when transmitting a new message. Therefore all classes have two constructors, one whats expects a buffer as the argument, and one that either initialize all field values to reasonable defaults, or require the user to supply initialization values.
+The is little reason to mutate messages on any level of the communication stack. Objects representing various parts of a data packet can be declared with constant data members. This is to say, that the messages are only either read from when receiving a message or built from the ground up when transmitting a new one. Therefore all classes have two constructors, one that expects a buffer as the argument, and one that either initialize all field values to reasonable defaults, or requires the user to supply initialization values.
 
-A basic pattern would look something like this
+A basic pattern would look something like this:
 
 ```
 class Some_protocol_element{
@@ -48,17 +48,7 @@ public:
 }
 ```
 
-Constructors should create a valid object, not one in some ‘not yet fully initialised’ state.
 
+## Naming conventions
 
-# REQUIREMENTS LIST
-
-Item	|Description	| Reference 					| Status | Support
---------|---------------|-------------------------------|--------|--------
-1		|PLTU structure: ASM, V3 Transfer Frame, CRC	| 3.2 	| M |
-2		|Idle data										| 3.3	| M |
-3		|Coding option: uncoded data					| 3.4 	| O.1 |
-4		|Coding option: convolutional					| 3.4.3 | O.1 |
-5		|Coding option: LDPC							| 3.4.4, 3.4.5 | O.1 |
-6		|Time tag support								| 3.5.6, 3.6.8 | O |
-7		|Handling of invalid received frames			| 3.6.6 | M  |
+The naming conventions used in the source code should match the names referred to in the specification of the protocol; in this case the CCSDS Blue Book. The object-oriented interfaces to various data structures have been designed in a way to keep a balance between readability and similarity between names in code and the specification.

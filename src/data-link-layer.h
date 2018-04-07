@@ -121,6 +121,7 @@ public:
 
     /* constructor for building directive for transmitting */
     SPDU_directive_set_control_parameters(uint8_t time_sample, uint8_t duplex,uint8_t reserved,uint8_t remote_no_more_data,uint8_t token, uint8_t directive_type) {
+        memset(_data_field, 0x00, sizeof(uint8_t)*2);
         _data_field[0] |= (time_sample << 2);
         _data_field[0] |= (duplex >> 1); // field on byte boundary
         _data_field[1] |= (duplex << 7);

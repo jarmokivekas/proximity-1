@@ -61,6 +61,7 @@ TEST(datalinklayer, transfer_frame_header_interface_init){
     CHECK_EQUAL(1, header.source_destination_identifier());
     CHECK_EQUAL(1, header.frame_length());
     CHECK_EQUAL(1, header.frame_sequence_number());
+    CHECK_EQUAL(sizeof(uint8_t)*5 , sizeof(header))
 }
 
 int main(int ac, char** av)
