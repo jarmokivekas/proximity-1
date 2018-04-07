@@ -1,17 +1,6 @@
 #include <iostream>
 #include <stdint.h>
 
-// class Transfer_frame_v3 {
-// private:
-// 	/* data */
-//
-// public:
-// 	Transfer_frame_v3 (arguments);
-// 	virtual ~Transfer_frame_v3 ();
-// };
-//
-//
-
 
 
 uint8_t version_num ;
@@ -31,12 +20,6 @@ uint8_t frame_seq_number;
 
 
 
-
-
-
-
-
-
 /* data link layed setcion B2 implementation
 SPDU TYPE 1: Directive/report/PLCW SPDU data field
 */
@@ -45,6 +28,11 @@ SPDU TYPE 1: Directive/report/PLCW SPDU data field
 class type_1_spdu_data_field {
 protected:
 	uint8_t _data_field[2];
+
+	void from_buffer(uint8_t data_field[2]){
+		_data_field[0] = data_field[0];
+		_data_field[1] = data_field[1];
+	};
 public:
 	// accessor for directive type field is shared between subclasses
 	uint8_t directive_type(void) {return 0b00000111 & _data_field[1];};
@@ -70,8 +58,7 @@ public:
 
 	/* constructor for initializing directive from received data buffer */
 	SPDU_directive_set_control_parameters(uint8_t data_field[2]){
-		_data_field[0] = data_field[0];
-		_data_field[1] = data_field[1];
+		from_buffer(data_field);
 	};
 
 	// accessor functions
@@ -80,38 +67,42 @@ public:
 	uint8_t reserved(void)             {return (0b01100000 & _data_field[1]) >> 5;};
 	uint8_t remote_no_more_data(void)  {return (0b00010000 & _data_field[1]) >> 4;};
 	uint8_t token(void)                {return (0b00001000 & _data_field[1]) >> 3;};
-
 	uint8_t *as_buffer(){
 		return _data_field;
 	};
 };
 
 
-//
-//
-// class SPDU_directive_set_control_parameters_2: public type_1_spdu_data_field {
-// private:
-// 	const uint8_t time_sample;
-// 	const uint8_t duplex;
-// 	const uint8_t reserved;
-// 	const uint8_t remote_no_more_data;
-// 	const uint8_t token;
-//
-// public:
-// 	/* constructor*/
-// 	SPDU_directive_set_control_parameters_2(uint8_t time_sample, uint8_t duplex,uint8_t reserved,uint8_t remote_no_more_data,uint8_t token):
-// 		time_sample(time_sample),
-// 		duplex(duplex),
-// 		reserved(reserved),
-// 		remote_no_more_data(remote_no_more_data),
-// 		token(token)
-// 		{;};
-// 	SPDU_directive_set_control_parameters_2()
-// 	uint8_t *as_buffer(){
-// 		return (time_sample<<10) | (duplex<<7) | (reserved<<5) |
-// 		(remote_no_more_data<<4) | (token<<3);
-// 	};
-// };
+
+
+class SPDU_directive_set_transmitter_parameters: public type_1_spdu_data_field {
+
+public:
+	/* constructor for building directive for transmitting */
+	SPDU_directive_set_transmitter_parameters(uint8_t mode,uint8_t data_rate,uint8_t modulation,uint8_t data_encoding,uint8_t frequency,uint8_t directive_type){
+		_data_field[0] |= (mode << 5);
+		_data_field[0] |= (data_rate << 1);
+		_data_field[0] |= (modulation);
+		_data_field[1] |= (data_encoding << 6);
+		_data_field[1] |= (frequency << 3);
+		_data_field[1] |= (directive_type);
+	};
+	/* constructor for initializing directive from received data buffer */
+	SPDU_directive_set_transmitter_parameters(uint8_t data_field[2]){
+		from_buffer(data_field);
+	};
+
+
+	// accessor functions
+	uint8_t mode(void)          {return (0b11100000 & _data_field[0]) >> 5;};
+	uint8_t data_rate(void)     {return (0b00011110 & _data_field[0]) >> 1;};
+	uint8_t modulation(void)    {return (0b00000001 & _data_field[0]) >> 0;};
+	uint8_t data_encoding(void) {return (0b11000000 & _data_field[1]) >> 6;};
+	uint8_t frequency(void)     {return (0b00111000 & _data_field[1]) >> 3;};
+	uint8_t *as_buffer(){
+		return _data_field;
+	};
+};
 
 
 

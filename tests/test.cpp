@@ -32,7 +32,16 @@ TEST(datalinklayer, SPDU_directive_set_control_parameters2){
     CHECK_EQUAL(1, spdu.remote_no_more_data());
     CHECK_EQUAL(1, spdu.token());
     CHECK_EQUAL(1, spdu.directive_type());
-    // uint8_t data_field[2] = {0b00000100, 0b10111001};
+}
+
+
+TEST(datalinklayer, SPDU_directive_set_transmitter_parameters){
+    SPDU_directive_set_transmitter_parameters spdu = SPDU_directive_set_transmitter_parameters(1,1,1,1,1,1);
+    CHECK_EQUAL(1, spdu.mode());
+    CHECK_EQUAL(1, spdu.data_rate());
+    CHECK_EQUAL(1, spdu.modulation());
+    CHECK_EQUAL(1, spdu.data_encoding());
+    CHECK_EQUAL(1, spdu.frequency());
 }
 
 
