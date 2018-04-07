@@ -1,6 +1,6 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestHarness.h"
-
+#include <stdint.h>
 #include "../src/data-link-layer.h"
 
 TEST_GROUP(datalinklayer)
@@ -8,19 +8,31 @@ TEST_GROUP(datalinklayer)
 };
 
 
-TEST(datalinklayer, spdu1){
-    SPDU_directive_set_control_parameters dir = SPDU_directive_set_control_parameters();
-    dir.duplex(3);
-    CHECK_EQUAL(3, dir.duplex());
-}
 
-TEST(datalinklayer, spdu2){
-    type_1_spdu_data_field spdu = type_1_spdu_data_field();
-    spdu.data_field = 0;
-    CHECK_EQUAL(0, spdu.data_field);
-    CHECK_EQUAL(0, spdu.directive_type());
-    spdu.directive_type(0b001);
+
+TEST(datalinklayer, SPDU_directive_set_control_parameters1){
+    uint8_t data_field[2] = {0b00000100, 0b10111001};
+    // initialize as from receive buffer
+    SPDU_directive_set_control_parameters spdu = SPDU_directive_set_control_parameters(data_field);
+    // make sure all values are correct
+    CHECK_EQUAL(1, spdu.time_sample());
+    CHECK_EQUAL(1, spdu.duplex());
+    CHECK_EQUAL(1, spdu.reserved());
+    CHECK_EQUAL(1, spdu.remote_no_more_data());
+    CHECK_EQUAL(1, spdu.token());
     CHECK_EQUAL(1, spdu.directive_type());
+}
+TEST(datalinklayer, SPDU_directive_set_control_parameters2){
+    // initialize as from receive buffer
+    SPDU_directive_set_control_parameters spdu = SPDU_directive_set_control_parameters(1,1,1,1,1,1);
+    // make sure all values are correct
+    CHECK_EQUAL(1, spdu.time_sample());
+    CHECK_EQUAL(1, spdu.duplex());
+    CHECK_EQUAL(1, spdu.reserved());
+    CHECK_EQUAL(1, spdu.remote_no_more_data());
+    CHECK_EQUAL(1, spdu.token());
+    CHECK_EQUAL(1, spdu.directive_type());
+    // uint8_t data_field[2] = {0b00000100, 0b10111001};
 }
 
 

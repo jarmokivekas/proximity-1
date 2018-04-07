@@ -30,6 +30,26 @@ The Proximity-1 protocol stack utilizes a lot data structures made up from bit f
 - PULT
 
 
+## Non mutability
+
+The is little reason to mutate messages on any level of the communication stack. Objects representing various parts of a data packet can be declared with constant data members. This is to say, that the messages are only either read from when receiving a message, or built from the ground up when transmitting a new message. Therefore all classes have two constructors, one whats expects a buffer as the argument, and one that either initialize all field values to reasonable defaults, or require the user to supply initialization values.
+
+A basic pattern would look something like this
+
+```
+class Some_protocol_element{
+
+public:
+    /
+    Some_protocol_element(uint8_t *buffer):
+    Some_protocol_element(uint8_t fieldA, uint8_t fieldB)
+    uint8_t *as_buffer()
+
+}
+```
+
+Constructors should create a valid object, not one in some ‘not yet fully initialised’ state.
+
 
 # REQUIREMENTS LIST
 
