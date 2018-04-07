@@ -16,5 +16,8 @@ test:
 runtest: test
 	./build/test
 
+codestyle:
+	astyle src/*
+
 clean:
 	rm -rf /build/*
